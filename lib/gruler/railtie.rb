@@ -3,11 +3,11 @@ require 'gruler'
 require 'rails'
 module Gruler
   class Railtie < Rails::Railtie
-    config.reactor = ActiveSupport::OrderedOptions.new
+    config.gruler = ActiveSupport::OrderedOptions.new
 
-    initializer "reactor.init" do |app|
-      REACTOR_DIR = File.join(Rails.root, "lib", "gruler")
-      TASKS_DIR = File.join(REACTOR_DIR, "tasks")
+    initializer "gruler.init" do |app|
+      GRULER_DIR = File.join(Rails.root, "lib", "gruler")
+      TASKS_DIR = File.join(GRULER_DIR, "tasks")
     end
   end
 

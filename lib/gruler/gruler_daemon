@@ -13,8 +13,10 @@ require 'ap'
 require 'ruby-debug'
 require 'daemons'
 
-ROOT = File.expand_path(File.dirname(__FILE__) + '/../../../../../')
-pid_dir = File.join(ROOT, "log")
+root_dir = "."
+root_dir = Rails.root if defined?(Rails)
+
+pid_dir = File.join(root_dir, "tmp")
 
 app_options = { 
   :dir_mode => :normal,
@@ -25,14 +27,15 @@ app_options = {
 }
 
 Daemons.run_proc("gruler_daemon", app_options) do
-  require File.join(ROOT, "/config/environment")
+  if defined?(Rails)
+    require File.join(root_dir, "/config/environment")
+    puts "Loaded #{Rails.env} environment"
+  end
   require 'gruler'
   require 'gruler/runner'
   require 'gruler/core'
   require 'eventmachine'
   require 'em-websocket'
-
-  puts "Loaded #{Rails.env} environment"
 
   Gruler::Runner.new.run
 end

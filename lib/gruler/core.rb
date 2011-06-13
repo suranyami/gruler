@@ -1,4 +1,4 @@
-module Reactor
+module Gruler
   class Core
     attr_accessor :rules
     def initialize(rules = [])
