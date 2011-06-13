@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# USAGE: 
+# 
+# ruby script/gruler_daemon run     -- start the daemon and stay on top
+# ruby script/gruler_daemon start   -- start the daemon in the background
+# ruby script/gruler_daemon stop    -- stop the daemon
+# ruby script/gruler_daemon restart -- stop the daemon and restart it afterwards
+
+ENV["RAILS_ENV"] ||= "development"
+
+require 'rubygems'
+require 'ap'
+require 'ruby-debug'
+require 'daemons'
+
+ROOT = File.expand_path(File.dirname(__FILE__) + '/../../../../../')
+pid_dir = File.join(ROOT, "log")
+
+app_options = { 
+  :dir_mode => :normal,
+  :dir => pid_dir,
+  :multiple => false,
+  :backtrace => true,
+  :log_output => true
+}
+
+Daemons.run_proc("gruler_daemon", app_options) do
+  require File.join(ROOT, "/config/environment")
+  require 'gruler'
+  require 'gruler/runner'
+  require 'gruler/core'
+  require 'eventmachine'
+  require 'em-websocket'
+
+  puts "Loaded #{Rails.env} environment"
+
+  Gruler::Runner.new.run
+end
+

@@ -1,0 +1,54 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+  <meta name="description" content="Jason Staten codes, cooks, and shoots" />
+  <title>Websocket demo</title>
+</head>
+<body>
+  <section>
+    <article class="post">
+      <section class="content">
+        <div id="last_sent">[0,0]</div>
+        <div id="replica">[0,0]</div>
+        <script src="jquery.js"></script> 
+        <script>
+          var socket;
+          var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          function setup() {
+            connect();
+            connect2();
+          
+            $(document).ready(function() {
+               $(document).mousemove(function(e) {
+                 // socket.send(e.pageX + ', ' + e.pageY);
+                 socket.send(JSON.stringify([e.pageX, e.pageY]));
+               }); 
+            })
+          
+            $(document).keypress(function(e) {
+              var char = String.fromCharCode(e.keyCode);
+              socket.send(char);
+            });
+          };
+
+          function connect() {
+            socket = new WebSocket('ws://localhost:8090');
+            socket.onmessage = function(mess) {
+              $('#last_sent').text(mess.data);
+            };
+          };
+
+          function connect2() {
+            socket = new WebSocket('ws://localhost:8090');
+            socket.onmessage = function(mess) {
+              $('#replica').text(mess.data);
+            };
+          };
+
+          window.onload += setup();
+        </script>
+      </section>
+    </article>
+  </section>
+</body>
+</html>
