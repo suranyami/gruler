@@ -1,13 +1,13 @@
 Gruler
 =======
 
-Introduction goes here.
+Multiplayer game rules engine with WebSocket pushes to clients, using EventMachine.
 
 
 Example
 =======
 
-Example goes here.
+
 
 
 Copyright (c) 2011 David Parry, released under the MIT license
